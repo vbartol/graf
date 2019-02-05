@@ -25,14 +25,13 @@ var graphics;
 var game = new Phaser.Game(config);
 var track;
 var text;
-var elapsed;
-var timer ;
+
+
 
 
     function preload ()
 {
-    this.load.image('bullet', 'assets/games/asteroids/bullets.png');
-    this.load.image('ship', 'assets/games/asteroids/ship.png');
+    this.load.image('ship', 'ship.png');
 }
 
 function create ()
@@ -61,7 +60,7 @@ function create ()
 }
 
 function update (time) {
-    var finishLine = 440;
+
     if (Phaser.Geom.Polygon.Contains(polygon, sprite.x, sprite.y)) {
         if (cursors.up.isDown) {
             this.physics.velocityFromRotation(sprite.rotation, 200, sprite.body.acceleration);
@@ -77,8 +76,15 @@ function update (time) {
             sprite.setAngularVelocity(0);
         }
 
+        if(sprite.y>380 && sprite.x<255) {
+            time.stopImmediatePropagation();
+            sprite.setVelocityX(0);
+            sprite.y -= 15;
 
+
+        }
     } else {
+
         if(sprite.y>399) {
             if (sprite.y < 451 && sprite.x < 919) {
                 sprite.x += 10;
@@ -105,7 +111,7 @@ function update (time) {
                 sprite.x-=10;
                 sprite.y+=30;
             }
-            if(sprite.y<255 && sprite.y>245){
+            if(sprite.y<260 && sprite.y>245){
                 sprite.x-=10;
                 sprite.y-=30;
             }
@@ -115,11 +121,10 @@ function update (time) {
             if(sprite.x<101){
                 sprite.x+=10;
             }
-            if(sprite.y>385 && sprite.y < 399 && sprite.x <255){
+            if(sprite.y>385 && sprite.y < 395 && sprite.x < 251){
                 sprite.y-=10;
-                sprite.setAcceleration(0);
-                time= timer.pause();
             }
+
         }
     }
         this.physics.world.wrap(sprite, 32);
