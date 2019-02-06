@@ -121,7 +121,7 @@ function update (time) {
             if(sprite.x<101){
                 sprite.x+=10;
             }
-            if(sprite.y>385 && sprite.y < 395 && sprite.x < 251){
+            if(sprite.y>385 && sprite.y < 395 && sprite.x < 255){
                 sprite.y-=10;
             }
 
