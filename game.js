@@ -5,9 +5,7 @@ var config = {
     height: 1200,
     physics: {
         default: "arcade",
-        arcade: {
-            fps: 60,
-            gravity: {y: 0}
+        arcade: {debug:true
         }
     },
     scene: {
@@ -25,7 +23,11 @@ var graphics;
 var game = new Phaser.Game(config);
 var track;
 var text;
-
+var i;
+var j;
+var k;
+var z;
+var rect;
 
 
 
@@ -36,7 +38,10 @@ var text;
 
 function create ()
 {
-        track = [400,600,1200,600,1200,100,50,100,50,390,250,390,250,250,920,250,920,450,400,450,400,600];
+        //koordinate za stazu
+        track = [400,600,1200,600,1215,595,1230,590,1250,570,1270,550,1290,530,1290,100,50,100,50,390,250,390,250,250,920,250,920,450,400,450,400,600];
+
+        //kreiranje polygona
         polygon = new Phaser.Geom.Polygon(track);
         graphics = this.add.graphics({lineStyle:{width: 2, color: 0xaa6622}});
         graphics.moveTo(polygon.points[0].x, polygon.points[0].y);
@@ -44,17 +49,24 @@ function create ()
         graphics.beginPath();
 
         for (var i = 1; i < polygon.points.length; i++)
-        {
+    {
             graphics.lineTo(polygon.points[i].x, polygon.points[i].y);
         }
         graphics.closePath();
         graphics.strokePath();
 
+        //kreiranje pravokutnika za cilj staze
+        rect = new Phaser.Geom.Rectangle(50,320,200,70);
+        graphics.strokeRectShape(rect);
+
+        //kreiranje sprite-a sa assertom ship
         sprite = this.physics.add.image(500, 530, 'ship');
+        sprite.body.collideWorldBounds = true;
+        sprite.setBounce(1,1);
         sprite.setDamping(true);
         sprite.setDrag(0.99);
         sprite.setMaxVelocity(200);
-        
+
         cursors = this.input.keyboard.createCursorKeys();
         text = this.add.text(10,20);
 }
@@ -62,6 +74,11 @@ function create ()
 function update (time) {
 
     if (Phaser.Geom.Polygon.Contains(polygon, sprite.x, sprite.y)) {
+
+        if (Phaser.Geom.Rectangle.ContainsPoint(rect, sprite)) {
+            time.stopImmediatePropagation();
+
+        }
         if (cursors.up.isDown) {
             this.physics.velocityFromRotation(sprite.rotation, 200, sprite.body.acceleration);
         } else {
@@ -75,61 +92,16 @@ function update (time) {
         } else {
             sprite.setAngularVelocity(0);
         }
-
-        if(sprite.y>380 && sprite.x<255) {
-            time.stopImmediatePropagation();
-            sprite.setVelocityX(0);
-            sprite.y -= 15;
-
-
-        }
     } else {
-
-        if(sprite.y>399) {
-            if (sprite.y < 451 && sprite.x < 919) {
-                sprite.x += 10;
-                sprite.y += 30;
-            }
-            if (sprite.y > 599) {
-                sprite.x += 10;
-                sprite.y -= 30;
-            }
-            if (sprite.x > 1199) { //ova radi
-                sprite.x -= 10;
-            }
-            if(sprite.x<405){
-                sprite.x+=10;
-            }
-        }else{
-            if(sprite.x>1199){
-                sprite.x-=10;
-            }
-            if(sprite.x<920 && sprite.x>915 ){
-                sprite.x+=10;
-            }
-            if(sprite.y<101){
-                sprite.x-=10;
-                sprite.y+=30;
-            }
-            if(sprite.y<260 && sprite.y>245){
-                sprite.x-=10;
-                sprite.y-=30;
-            }
-            if(sprite.x<255 && sprite.x>245){
-                sprite.x-=10;
-            }
-            if(sprite.x<101){
-                sprite.x+=10;
-            }
-            if(sprite.y>385 && sprite.y < 395 && sprite.x < 255){
-                sprite.y-=10;
-            }
-
+        game.physics.arcade.collide(sprite,polygon)
+            sprite.setBounce(1,1);
         }
-    }
+    
+
+
+
         this.physics.world.wrap(sprite, 32);
-        text.setText("Time: " + time.toString().substr(0,2));
+        text.setText("Time: " + time.toString().substr(0, 4));
+
 
 }
-
-
