@@ -121,7 +121,7 @@ function update (time) {
                     continue;
                 }
                 if(sprite.y<300){
-                    if(angle<=0){
+                    if(sprite.y<120){
                         sprite.setVelocity(-10,20);
                         this.physics.add.collider(sprite, polygon);
                         sprite.angle=130;
