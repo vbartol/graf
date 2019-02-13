@@ -73,8 +73,6 @@ function create ()
 
 function update (time) {
 
-
-    //mora bit unutar polygon.contains zato što ako nije onda ga line by line intersepta else naredba!
     if (Phaser.Geom.Rectangle.ContainsPoint(rect, sprite)) {
         time.stopImmediatePropagation();
     }
@@ -97,32 +95,55 @@ function update (time) {
         oldposX=sprite.x;
         oldposY=sprite.y;
         angle = sprite.angle;
+
     } else {
 
         for (i = 0; i < track.length - 2; i += 2) {
             line1 = new Phaser.Geom.Line(track[i], track[i + 1], track[i + 2], track[i + 3]);
             line2 = new Phaser.Geom.Line(sprite.x, sprite.y, oldposX, oldposY);
             if (Phaser.Geom.Intersects.LineToLine(line1, line2)) {
+                if(sprite.x>1190 && sprite.y>100){
+                    sprite.setVelocity(-10,0);
+                    this.physics.add.collider(sprite, polygon);
+                    sprite.angle=-130;
+                    continue;
+                }
+                if(sprite.x<1195 && sprite.x>915 && sprite.y<500 && sprite.y>110){
+                    sprite.setVelocity(20,10);
+                    this.physics.add.collider(sprite, polygon);
+                    sprite.angle=-45;
+                    continue;
+                }
+                if(sprite.x<60){
+                    sprite.setVelocity(20,10);
+                    this.physics.add.collider(sprite, polygon);
+                    sprite.angle=45;
+                    continue;
+                }
                 if(sprite.y<300){
                     if(angle<=0){
-                        sprite.setVelocity(-10,10).setBounce(1, 1).setCollideWorldBounds(true);
+                        sprite.setVelocity(-10,20);
                         this.physics.add.collider(sprite, polygon);
-                        sprite.angle-=75;
+                        sprite.angle=130;
+                        continue;
                     }else{
-                        sprite.setVelocity(-10,10).setBounce(1, 1).setCollideWorldBounds(true);
+                        sprite.setVelocity(-10,-10);
                         this.physics.add.collider(sprite, polygon);
-                        sprite.angle+=75;
+                        sprite.angle=-130;
+                        continue;
                     }
-                }
-                if(angle>=0){
-                    sprite.setVelocity(10,-10).setBounce(1, 1).setCollideWorldBounds(true);
-                    this.physics.add.collider(sprite, polygon);
-                    sprite.angle-=25;
                 }else{
-                    sprite.setVelocity(10,10).setBounce(1, 1).setCollideWorldBounds(true);
+                if(angle>=0){
+                    sprite.setVelocity(10,-10);
                     this.physics.add.collider(sprite, polygon);
-                    sprite.angle+=25;
-
+                    sprite.angle=-45;
+                    continue;
+                }else {
+                    sprite.setVelocity(10, 10);
+                    this.physics.add.collider(sprite, polygon);
+                    sprite.angle = 45;
+                    continue;
+                }
                 }
 
                        }
@@ -132,5 +153,5 @@ function update (time) {
     //game.physics.arcade.collide(sprite,polygon);
           //  sprite.setBounce(0.5);
         this.physics.world.wrap(sprite, 32);
-        text.setText("Time: " + time.toString().substr(0, 4));
+        text.setText("Time: " + time.toString().substr(0, 2));
 }
