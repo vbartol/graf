@@ -59,7 +59,7 @@ function create ()
     graphics.strokePath();
 
     //kreiranje pravokutnika za cilj staze
-    rect = new Phaser.Geom.Rectangle(50,300,200,90);
+    rect = new Phaser.Geom.Rectangle(50,370,200,20);
     graphics.strokeRectShape(rect);
 
     //kreiranje sprite-a sa assertom ship
@@ -93,7 +93,6 @@ function update (time)
             }
             oldposX = sprite.x;
             oldposY = sprite.y;
-            angle = sprite.angle;
 
         }
 
@@ -106,47 +105,47 @@ function update (time)
             if(Phaser.Geom.Intersects.LineToRectangle(line2,rect)){
                     time.stopImmediatePropagation();
                 }
-            
+
                 if (Phaser.Geom.Intersects.LineToLine(line1, line2)) {
 
                     if (sprite.x > 1190 && sprite.y > 100) {
                         sprite.setVelocity(-10, 0);
-                        sprite.angle = -130;
+                        sprite.angle = -100;
                         continue;
                     }
                     if (sprite.x < 1195 && sprite.x > 915 && sprite.y < 500 && sprite.y > 110) {
                         sprite.setVelocity(20, 10);
-                        sprite.angle = -30;
+                        sprite.angle = -80;
                         continue;
                     }
                     if (sprite.x < 55 && sprite.x > 45) {
                         sprite.setVelocity(20, 10);
-                        sprite.angle = 30;
+                        sprite.angle = 80;
                         continue;
                     }
-                    if (sprite.x > 60 && sprite.x < 255 && sprite.y<298) {
+                    if (sprite.x > 60 && sprite.x < 255 && sprite.y<370) {
                         sprite.setVelocity(-20, 10);
-                        sprite.angle = 150;
+                        sprite.angle = 100;
                         continue;
                     }
                     if (sprite.y < 300) {
                         if (sprite.y < 120) {
                             sprite.setVelocity(-10, 20);
-                            sprite.angle = 150;
+                            sprite.angle = 170;
                             continue;
                         } else {
                             sprite.setVelocity(-10, -10);
-                            sprite.angle = -150;
+                            sprite.angle = -170;
                             continue;
                         }
                     } else {
                         if (sprite.y > 590) {
                             sprite.setVelocity(10, -10);
-                            sprite.angle = -30;
+                            sprite.angle = -10;
                             continue;
                         } else if (sprite.y>440) {
                             sprite.setVelocity(10, 10);
-                            sprite.angle = 30;
+                            sprite.angle = 10;
                             continue;
                         }
                     }
